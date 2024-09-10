@@ -70,7 +70,7 @@ jobs:
           git config --global user.name "CI Bot"
           # Add generated output files to the commit
           ls -al > generated_results.txt
-          git config --global --add safe.directory .
+          git config --global --add safe.directory $(pwd)
           git add -f ./generated_results.txt
           # git add -f ./generated-outputs/*
           # Show git status

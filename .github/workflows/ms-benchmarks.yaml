@@ -38,17 +38,18 @@ jobs:
       - name: Checkout forked moonshot-data
         uses: actions/checkout@v3
         with:
+          path: moonshot-data
           ref: ${{ env.BRANCH }}
 
       - name: Setup moonshot
         run: |
-          chmod +x .ci/setup_ms_script.sh
-          bash .ci/setup_ms_script.sh
+          chmod +x moonshot-data/.ci/setup_ms_script.sh
+          bash moonshot-data/.ci/setup_ms_script.sh
 
       - name: Run moonshot
         run: |
-          chmod +x .ci/run_ms_script.sh
-          bash .ci/run_ms_script.sh
+          chmod +x moonshot-data/.ci/run_ms_script.sh
+          bash moonshot-data/.ci/run_ms_script.sh
         env:
           COOKBOOK_RUN_NAME: testcookbookrun-${{ github.run_id }}
           MOONSHOT_RUN_COOKBOOKS_LIST: |
@@ -58,16 +59,17 @@ jobs:
 
       - name: Display results
         run: |
-          ls -al
-          ls -al ./generated-outputs/results/
-          chmod +x .ci/display_ms_script.sh
-          bash .ci/display_ms_script.sh
+#          ls -al
+#          ls -al ./generated-outputs/results/
+          chmod +x moonshot-data/.ci/display_ms_script.sh
+          bash moonshot-data/.ci/display_ms_script.sh
         env:
           COOKBOOK_RUN_NAME: testcookbookrun-${{ github.run_id }}
 
       - name: Commit results
         run: |
           # Configure git user for committing changes
+          cd moonshot-data
           git config --global user.email "ci@example.com"
           git config --global user.name "CI Bot"
           # Add generated output files to the commit

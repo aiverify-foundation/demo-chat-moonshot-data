@@ -23,8 +23,7 @@ concurrency:
 jobs:
   run-moonshot:
     runs-on: ubuntu-latest
-    container:
-      image: python:3.11
+
     steps:
       - name: Set branch variable
         run: |

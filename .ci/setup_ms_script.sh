@@ -5,8 +5,8 @@ echo "Installing moonshot..."
 pip install "aiverify-moonshot[all]"
 
 # Clone the forked repository and install its requirements
-echo "Cloning forked repository and installing requirements..."
-pip install -r moonshot-data/requirements.txt
+#echo "Cloning forked repository and installing requirements..."
+#pip install -r moonshot-data/requirements.txt
 
 # Set logging information
 echo "Setting log info..."

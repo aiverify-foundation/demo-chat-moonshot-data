@@ -41,10 +41,17 @@ jobs:
           path: moonshot-data
           ref: ${{ env.BRANCH }}
 
+      - name: Setup python 3.11
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: 'pip'
+
       - name: Setup moonshot
         run: |
           chmod +x moonshot-data/.ci/setup_ms_script.sh
           bash moonshot-data/.ci/setup_ms_script.sh
+          pip installl -r moonshot-data/requirements.txt
 
       - name: Run moonshot
         run: |
@@ -59,6 +66,9 @@ jobs:
 
       - name: Display results
         run: |
+          ls -al
+          ls -al moonshot-data
+          ls -al moonshot-data/generated-outputs/results/
           chmod +x moonshot-data/.ci/display_ms_script.sh
           bash moonshot-data/.ci/display_ms_script.sh
         env:

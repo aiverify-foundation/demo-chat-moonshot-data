@@ -72,6 +72,7 @@ jobs:
       - name: Commit results
         run: |
           # Configure git user for committing changes
+          git pull origin ${{ env.BRANCH }}
           cd moonshot-data
           git config --global user.email "ci@example.com"
           git config --global user.name "CI Bot"

@@ -59,14 +59,7 @@ jobs:
       - name: Display results
         run: |
           ls -al
-          result_file=$(find . -name "testcookbookrun*")
-          if [ -z "$result_file" ]; then
-            echo "No result file found!"
-            exit 1
-          fi
-          # Display the found file
-          echo "Found result file: $result_file"
-
+          ls -al ./generated-outputs/
           chmod +x .ci/display_ms_script.sh
           bash .ci/display_ms_script.sh
         env:

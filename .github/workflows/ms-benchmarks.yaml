@@ -23,6 +23,7 @@ concurrency:
 jobs:
   run-moonshot:
     runs-on: ubuntu-latest
+    container: python:3.11
 
     steps:
       - name: Set branch variable
@@ -39,12 +40,6 @@ jobs:
         with:
           path: moonshot-data
           ref: ${{ env.BRANCH }}
-
-      - name: Setup python 3.11
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.11"
-          cache: 'pip'
 
       - name: Setup moonshot
         run: |

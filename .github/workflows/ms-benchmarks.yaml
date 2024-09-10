@@ -56,13 +56,13 @@ jobs:
           MOONSHOT_UPDATE_ENDPOINTS_LIST: |
             ${{ secrets.AZURE_OPENAI_4O_UPDATE_ENDPOINT }};${{ secrets.TOGETHER_LLAMA3_8B_CHAT_UPDATE_ENDPOINT }};${{ secrets.TOGETHER_LLAMA_GUARD_7B_UPDATE_ENDPOINT }}
 
-#      - name: Display results
-#        run: |
-#          chmod +x .ci/display_ms_script.sh
-#          bash .ci/display_ms_script.sh
-#        env:
-#          COOKBOOK_RUN_NAME: testcookbookrun-${{ github.run_id }}
-#
+      - name: Display results
+        run: |
+          chmod +x .ci/display_ms_script.sh
+          bash .ci/display_ms_script.sh
+        env:
+          COOKBOOK_RUN_NAME: testcookbookrun-${{ github.run_id }}
+
       - name: Commit results
         run: |
           # Configure git user for committing changes

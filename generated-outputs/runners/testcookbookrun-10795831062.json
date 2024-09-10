@@ -1,0 +1,8 @@
+{
+  "name": "testcookbookrun-10795831062",
+  "database_file": "moonshot-data/generated-outputs/databases/testcookbookrun-10795831062.db",
+  "endpoints": [
+    "azure-openai-gpt4o"
+  ],
+  "description": ""
+}

@@ -30,11 +30,9 @@ jobs:
         run: |
           echo "event_name=${{ github.event_name }}"
           if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
-            echo "BRANCH=${{ inputs.branch_to_test }}" >> "$GITHUB_ENV"
-          elif [ "${{ github.event_name }}" == "ms_cicd" ]; then
-            echo "BRANCH=${{ inputs.branch_to_test }}" >> "$GITHUB_ENV"
+            echo "BRANCH=${{ inputs.branch_to_test }}" >> $GITHUB_ENV
           else
-            echo "BRANCH=main" >> "$GITHUB_ENV"
+            echo "BRANCH=main" >> $GITHUB_ENV
           fi
 
       - name: Checkout forked moonshot-data
@@ -58,20 +56,22 @@ jobs:
           MOONSHOT_UPDATE_ENDPOINTS_LIST: |
             ${{ secrets.AZURE_OPENAI_4O_UPDATE_ENDPOINT }};${{ secrets.TOGETHER_LLAMA3_8B_CHAT_UPDATE_ENDPOINT }};${{ secrets.TOGETHER_LLAMA_GUARD_7B_UPDATE_ENDPOINT }}
 
-      - name: Display results
-        run: |
-          chmod +x .ci/display_ms_script.sh
-          bash .ci/display_ms_script.sh
-        env:
-          COOKBOOK_RUN_NAME: testcookbookrun-${{ github.run_id }}
-
+#      - name: Display results
+#        run: |
+#          chmod +x .ci/display_ms_script.sh
+#          bash .ci/display_ms_script.sh
+#        env:
+#          COOKBOOK_RUN_NAME: testcookbookrun-${{ github.run_id }}
+#
       - name: Commit results
         run: |
           # Configure git user for committing changes
           git config --global user.email "ci@example.com"
           git config --global user.name "CI Bot"
           # Add generated output files to the commit
-          git add -f ./generated-outputs/*
+          ls -al > generated_results.txt
+          git add -f ./generated_results.txt
+          # git add -f ./generated-outputs/*
           # Show git status
           git status
           # Commit the changes with a message including the pipeline ID

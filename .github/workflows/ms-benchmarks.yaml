@@ -61,9 +61,6 @@ jobs:
 
       - name: Display results
         run: |
-          ls -al
-          ls -al moonshot-data
-          ls -al moonshot-data/generated-outputs/results/
           chmod +x moonshot-data/.ci/display_ms_script.sh
           bash moonshot-data/.ci/display_ms_script.sh
         env:

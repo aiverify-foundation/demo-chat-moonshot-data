@@ -58,6 +58,15 @@ jobs:
 
       - name: Display results
         run: |
+          ls -al
+          result_file=$(find . -name "testcookbookrun*")
+          if [ -z "$result_file" ]; then
+            echo "No result file found!"
+            exit 1
+          fi
+          # Display the found file
+          echo "Found result file: $result_file"
+
           chmod +x .ci/display_ms_script.sh
           bash .ci/display_ms_script.sh
         env:
@@ -69,10 +78,8 @@ jobs:
           git config --global user.email "ci@example.com"
           git config --global user.name "CI Bot"
           # Add generated output files to the commit
-          ls -al > generated_results.txt
           git config --global --add safe.directory $(pwd)
-          git add -f ./generated_results.txt
-          # git add -f ./generated-outputs/*
+          git add -f ./generated-outputs/*
           # Show git status
           git status
           # Commit the changes with a message including the pipeline ID

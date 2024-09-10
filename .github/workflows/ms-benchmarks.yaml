@@ -1,12 +1,24 @@
 name: Moonshot CI/CD
 
 on:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+#  push:
+#    branches:
+#      - main
+#  pull_request:
+#    branches:
+#      - main
+  workflow_dispatch:
+      inputs:
+        branch_to_test:
+          description: 'Branch or tag to run test'
+          required: true
+          default: 'main'
+          type: string
+
+# Allow one concurrent deployment
+concurrency:
+  group: ${{ github.repository }}-${{ github.workflow }}
+  cancel-in-progress: true
 
 jobs:
   run-moonshot:
@@ -14,23 +26,31 @@ jobs:
     container:
       image: python:3.11
     steps:
-      - name: Checkout forked moonshot
+      - name: Set branch variable
+        run: |
+          echo "event_name=${{ github.event_name }}"
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            echo "BRANCH=${{ inputs.branch_to_test }}" >> "$GITHUB_ENV"
+          elif [ "${{ github.event_name }}" == "ms_cicd" ]; then
+            echo "BRANCH=${{ inputs.branch_to_test }}" >> "$GITHUB_ENV"
+          else
+            echo "BRANCH=main" >> "$GITHUB_ENV"
+          fi
+
+      - name: Checkout forked moonshot-data
         uses: actions/checkout@v3
         with:
-          repository: ${{ vars.GH_MOONSHOT_CI_REPO_LOC }}
-          ref: 'main'
-          path: moonshot-data
-          token:  ${{ secrets.ACTIONS_GITHUB_TOKEN }}
+          ref: ${{ env.BRANCH }}
 
-      - name: Setup Moonshot
+      - name: Setup moonshot
         run: |
-          chmod +x moonshot-data/.github/scripts/setup_ms_script.sh
-          ./moonshot-data/.github/scripts/setup_ms_script.sh
+          chmod +x .ci/setup_ms_script.sh
+          bash .ci/setup_ms_script.sh
 
-      - name: Run Moonshot
+      - name: Run moonshot
         run: |
-          chmod +x moonshot-data/.github/scripts/run_ms_script.sh
-          ./moonshot-data/.github/scripts/run_ms_script.sh
+          chmod +x .ci/run_ms_script.sh
+          bash .ci/run_ms_script.sh
         env:
           COOKBOOK_RUN_NAME: testcookbookrun-${{ github.run_id }}
           MOONSHOT_RUN_COOKBOOKS_LIST: |
@@ -38,16 +58,15 @@ jobs:
           MOONSHOT_UPDATE_ENDPOINTS_LIST: |
             ${{ secrets.AZURE_OPENAI_4O_UPDATE_ENDPOINT }};${{ secrets.TOGETHER_LLAMA3_8B_CHAT_UPDATE_ENDPOINT }};${{ secrets.TOGETHER_LLAMA_GUARD_7B_UPDATE_ENDPOINT }}
 
-      - name: Display Results
+      - name: Display results
         run: |
-          chmod +x moonshot-data/.github/scripts/display_ms_script.sh
-          ./moonshot-data/.github/scripts/display_ms_script.sh
+          chmod +x .ci/display_ms_script.sh
+          bash .ci/display_ms_script.sh
         env:
           COOKBOOK_RUN_NAME: testcookbookrun-${{ github.run_id }}
 
-      - name: Commit Results
+      - name: Commit results
         run: |
-          cd moonshot-data/
           # Configure git user for committing changes
           git config --global user.email "ci@example.com"
           git config --global user.name "CI Bot"

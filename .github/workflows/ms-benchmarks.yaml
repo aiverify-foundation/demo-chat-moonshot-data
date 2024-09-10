@@ -1,4 +1,4 @@
-name: Moonshot CI/CD
+name: Moonshot CICD
 
 on:
 #  push:

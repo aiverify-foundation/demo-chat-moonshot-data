@@ -59,7 +59,7 @@ jobs:
       - name: Display results
         run: |
           ls -al
-          ls -al ./generated-outputs/
+          ls -al ./generated-outputs/results/
           chmod +x .ci/display_ms_script.sh
           bash .ci/display_ms_script.sh
         env:

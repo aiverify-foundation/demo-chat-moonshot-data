@@ -50,7 +50,7 @@ jobs:
         run: |
           chmod +x moonshot-data/.ci/setup_ms_script.sh
           bash moonshot-data/.ci/setup_ms_script.sh
-          pip installl -r moonshot-data/requirements.txt
+          pip install -r moonshot-data/requirements.txt
 
       - name: Run moonshot
         run: |
